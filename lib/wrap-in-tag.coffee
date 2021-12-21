@@ -9,7 +9,7 @@ module.exports =
       editor.getSelections().map((item) -> wrapSelection(editor, item))
 
 wrapSelection = (editor, selection) ->
-  tag = 'p'
+  tag = '-'
   text = selection.getText()
   tagRangePos = selection.getBufferRange()
 
@@ -34,9 +34,11 @@ wrapSelection = (editor, selection) ->
   selection.cursor.setBufferPosition([tagRangePos.start.row, tagRangePos.start.column+1])
   editor.addSelectionForBufferRange(newStartTagSelectRange)
   endTagSelection = editor.addSelectionForBufferRange(newEndTagSelectRange)
+  startTagSelection = editor.addSelectionForBufferRange(newStartTagSelectRange)
 
   editorView = atom.views.getView editor
   editorView.addEventListener 'keydown', (event) ->
-    if event.keyCode is 32
+    if event.keyCode is 13
       endTagSelection.cursor.marker.destroy()
+      startTagSelection.cursor.marker.destroy()
       @removeEventListener 'keydown', arguments.callee;
